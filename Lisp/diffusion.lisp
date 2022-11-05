@@ -11,15 +11,15 @@
 
 (defvar DTerm (/ (* diffusion_coefficient timestep) (* distance_between_blocks distance_between_blocks)))
 
-(defvar cube (make-array (list maxsize maxsize maxsize))) ; Arrays should be zeroed by default
+(defvar cube (make-array (list maxsize maxsize maxsize):initial-element 0.0l0)) 
 
 (setf (aref cube 0 0 0) 1.0e21) ; Initialize first cell
 
 (defvar acctime 0.0)  ; Accumulated time (Note: "time" is a keyword in lisp)
-(defvar eqratio 0.0)  ; (Note: "ratio" is also a lisp keyword)
+(defvar eqratio 0.0l0)  ; (Note: "ratio" is also a lisp keyword)
 (defvar change)
 
-(defvar sumval)
+(defvar sumval) 
 (defvar minval)
 (defvar maxval)
 
@@ -55,7 +55,7 @@
     
     (setf eqratio (/ minval maxval))
 
-    ;(format t "Ratio: ~a~%" eqratio)    
+    (format t "~20a" eqratio)    
     (format t "~20a~20a" acctime (aref cube 0 0 0))
     (format t "~20a" (aref cube (- maxsize 1) 0 0))
     (format t "~20a" (aref cube (- maxsize 1) (- maxsize 1) 0))
