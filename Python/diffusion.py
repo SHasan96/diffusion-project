@@ -1,9 +1,13 @@
 from numpy import *
+import math
 
 def main():
-    maxsize = int(input("M_size?: ")
-    # To do: partition
-    # maxsize = 10  # Volume elements, i.e., divisions of the room dimension
+    maxsize = int(input("M_size?: "))
+    partition = False 
+    flag = input("Add partition? (y/n): ")
+    if flag == 'y':
+        partition = True
+ 
     cube = zeros((maxsize, maxsize, maxsize), dtype = 'double')   # Initialize array an array with zeroes
 
     diffusion_coefficient = 0.175 
@@ -16,10 +20,17 @@ def main():
 
     cube [0][0][0] = 1.0e21  # Initialize the first cell
     
-    passed = 0
     time = 0.0  # To keep up with accumulated time
     ratio = 0.0
     
+    # Adding the partition if flag is true
+    if partition:
+        px = math.ceil(maxsize * 0.5) - 1 # use lower median for even Msize
+        py = math.ceil(maxsize * (1-0.75)) - 1 # Height of partition as a percent of maxsize (1 - percent height)
+        for j in range (py, maxsize):
+            for k in range (0, maxsize):
+                cube[px][j][k] = -1 # Mark cubes with partition with -1
+         
     while ratio < 0.99:
         for i in range (0, maxsize):
              for j in range (0, maxsize):
@@ -27,7 +38,8 @@ def main():
                        for l in range (0, maxsize):
                             for m in range (0, maxsize):
                                  for n in range (0, maxsize):
-                                      
+                                      if cube[i][j][k] == -1 or cube[l][m][n] == -1:
+                                          continue    
                                       if ((i == l and j == m and k == n+1) or  
                                          (i == l and j == m and k == n-1) or  
                                          (i == l and j == m+1 and k == n) or  
@@ -46,19 +58,21 @@ def main():
         
         for i in range (0, maxsize): 
             for j in range (0, maxsize):
-                for k in range (0, maxsize): 
+                for k in range (0, maxsize):
+                    if cube[i][j][k] == -1:
+                        continue 
                     maxval = max(cube[i][j][k],maxval)
                     minval = min(cube[i][j][k],minval)
                     sumval += cube[i][j][k]; 
                     
         ratio = minval / maxval
         
-        print(ratio, " time = ", time) # testing ratio
-        print(time, " ", cube[0][0][0], end="")
-        print(      " ", cube[maxsize-1][0][0], end="")
-        print(      " ", cube[maxsize-1][maxsize-1][0], end="")
-        print(      " ", cube[maxsize-1][maxsize-1][maxsize-1], end="")
-        print(      " ", sumval)
+        #print(ratio, end="  ") 
+        #print(time, "  ", cube[0][0][0], end="  ")
+        #print(      "  ", cube[maxsize-1][0][0], end="  ")
+        #print(      "  ", cube[maxsize-1][maxsize-1][0], end="  ")
+        #print(      "  ", cube[maxsize-1][maxsize-1][maxsize-1], end="  ")
+        #print(      "  ", sumval)
     
     print("Box equilibrated in ", time, " seconds of simulated time.")
     
