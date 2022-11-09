@@ -45,8 +45,6 @@
 
       (setf (aref cube 0 0 0) 1.0e21) ; Initialize first cell
 
-      ; Accumulated time (Note: "time" is a keyword in lisp)
-      ; (Note: "ratio" is also a lisp keyword)
       (loop while (<= eqratio 0.99) do 
           (loop for i from 0 to (- maxsize 1) do
               (loop for j from 0 to (- maxsize 1) do
