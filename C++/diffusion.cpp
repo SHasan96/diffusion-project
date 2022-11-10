@@ -1,19 +1,23 @@
-#include <cmath> 
+/*
+  CSC 330
+  SIMPLIFIED 3D DIFFUSION MODEL
+*/
+#include<cmath> 
 #include<iostream>
-
 using namespace std;
 
 int main() {
-
-    int maxsize;  // Volume elements, i.e., cubic divisions of the room dimension
+    // Ask for Msize
+    int maxsize;  // This is Msize, i.e., cubic divisions of the room dimension
     cout << "M_size?: ";
-    cin >> maxsize;
-
+    cin >> maxsize; 
+  
+    // Ask if user want to add a partition
     bool partition = false; // No partition by default
     char flag;
     cout << "Add partition? (y/n): ";
     cin >> flag;
-    if (flag == 'y') {
+    if (flag == 'y') { // If user inputs 'y' set partition as true
         partition = true;
     }
     
@@ -25,17 +29,10 @@ int main() {
       cube[i] = new double* [maxsize];
       for (int j = 0; j < maxsize; j++) {
           cube[i][j] = new double [maxsize];
-          }
-     }
+      }
+    }   
 
-    for (i = 0;i < maxsize; i++) {
-        for (j = 0;j < maxsize; j++) {
-            for (k = 0; k < maxsize; k++ ) {
-                cube[i][j][k] = i*maxsize*maxsize + j*maxsize + k + 1.0;
-            }
-        }
-    }
-
+    //Declare variables
     double diffusion_coefficient = 0.175; 
     double room_dimension = 5;                      // 5 Meters
     double speed_of_gas_molecules = 250.0;          // Based on 100 g/mol gas at RT
@@ -48,10 +45,10 @@ int main() {
     double time = 0.0; // To keep up with accumulated time
     double ratio = 0.0;
     
+    // Adding partition
     if (partition) {
-    	// Adding partition
-    	int px = ceil(maxsize * 0.5) - 1; // use the lower of the median for even Msize
-    	int py = ceil(maxsize * (1-0.75)) - 1; //partition height (1 - percent height)
+    	int px = ceil(maxsize * 0.5) - 1; // Use the lower of the median for even Msize
+    	int py = ceil(maxsize * (1-0.75)) - 1; // Partition height (1 - percent height)
     	// Blocks with partition will be set to -1
     	for (int j=py; j<maxsize; j++){
             for (int k=0; k<maxsize; k++){
@@ -59,7 +56,8 @@ int main() {
             }           
         }
     }
-
+    
+    // Loop through all blocks
     do {
         for (int i=0; i<maxsize; i++) { 
             for (int j=0; j<maxsize; j++) { 
@@ -67,16 +65,17 @@ int main() {
                     for (int l=0; l<maxsize; l++) { 
                         for (int m=0; m<maxsize; m++) { 
                             for (int n=0; n<maxsize; n++) { 
+                                // No change if partition (a value of -1) is encountered
                                 if ((cube[i][j][k] == -1) || (cube[l][m][n] == -1)) {
                                     continue;
-                                } 
-                                if (    ( ( i == l )   && ( j == m )   && ( k == n+1) ) ||  
-                                        ( ( i == l )   && ( j == m )   && ( k == n-1) ) ||  
-                                        ( ( i == l )   && ( j == m+1 ) && ( k == n)   ) ||  
-                                        ( ( i == l )   && ( j == m-1 ) && ( k == n)   ) ||  
-                                        ( ( i == l+1 ) && ( j == m )   && ( k == n)   ) ||  
-                                        ( ( i == l-1 ) && ( j == m )   && ( k == n)   ) ) {
-
+                                }
+                                // Change occurs between adjacent blocks 
+                                if (((i == l) && (j == m) && (k == n+1)) ||  
+                                    ((i == l) && (j == m) && (k == n-1)) ||  
+                                    ((i == l) && (j == m+1) && (k == n)) ||  
+                                    ((i == l) && (j == m-1) && (k == n)) ||  
+                                    ((i == l+1) && (j == m) && (k == n)) ||  
+                                    ((i == l-1) && (j == m) && (k == n)) ) {
                                         double change = (cube[i][j][k] - cube[l][m][n]) * DTerm;
                                         cube[i][j][k] -= change;                                
                                         cube[l][m][n] += change;                                
@@ -90,14 +89,16 @@ int main() {
 
         time += timestep;   
 
+        // Variables to keep track of minimums, maximums and total
         double sumval = 0.0;
         double maxval = cube[0][0][0]; 
         double minval = cube[0][0][0];
 
+        // Find the minimum and the maximum value blocks to calculate ratio
         for (int i=0; i<maxsize; i++) { 
             for (int j=0; j<maxsize; j++) { 
                 for (int k=0; k<maxsize; k++) { 
-                    if (cube[i][j][k] == -1) {
+                    if (cube[i][j][k] == -1) { // Ignore partition blocks (which have -1)
                         continue;
                     }
                     maxval = max(cube[i][j][k],maxval);
@@ -106,9 +107,7 @@ int main() {
                 }
             }
         }
-
         ratio = minval / maxval;
-
         //cout <<  ratio << "\t";
         //cout << time << "\t" << cube[0][0][0];
         //cout <<         "\t" << cube[maxsize-1][0][0];
