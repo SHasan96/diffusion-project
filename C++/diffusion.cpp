@@ -88,7 +88,7 @@ int main() {
             }
         }  
 
-        time = time + timestep;   
+        time += timestep;   
 
         double sumval = 0.0;
         double maxval = cube[0][0][0]; 
