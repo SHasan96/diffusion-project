@@ -20,13 +20,17 @@ fn main() {
     let timestep: f64 = (room_dimension / speed_of_gas_molecules) / (maxsize as f64); // h in seconds
     let distance_between_blocks = room_dimension / (maxsize as f64);
     let d_term = diffusion_coefficient * timestep / (distance_between_blocks*distance_between_blocks);
-
+    //////////// 
+    // Cube[x][y][z] can be changed here just fine but not inside the nested loops
     cube[0 as usize][0 as usize][0 as usize] = 1.0e21; // Initialize the first cell
-    println!("First cube is {}", cube[0][0][0]);    
-   
+    println!("First cube is {}", cube[0][0][0]); // this seems right   
+    cube[(maxsize-1) as usize][0 as usize][0 as usize] -= 1.0e20; // this works
+    println!("First cube is {}", cube[(maxsize-1) as usize][0 as usize][0 as usize]); // this is ok
+    /////////////////////////////////////////////////////
     let mut time: f64 = 0.0; // To keep up with accumulated time
     let mut eqratio: f64 = 0.0;
-    
+    //let mut change: f64;
+
     // Go through all blocks 
     while eqratio <= 0.99 {
        for i in 0..maxsize-1 {
@@ -45,10 +49,13 @@ fn main() {
                                let change: f64 = (cube[i as usize][j as usize][k as usize] 
                                          - cube[l as usize][m as usize][n as usize]) * d_term;
                                //println!("{} is the change", change);
+                               ///////////////////////////////////////////////////
+                               // These claculations are not working
                                cube[i as usize][j as usize][k as usize] = 
                                     cube[i as usize][j as usize][k as usize] - change;                                
                                cube[l as usize][m as usize][n as usize]  = 
-                                    cube[l as usize][m as usize][n as usize] + change;  
+                                    cube[l as usize][m as usize][n as usize] + change;
+                               ///////////////////////////////////////////////////////  
                           }
                        }
                     }
