@@ -41,7 +41,7 @@ Listed in order in which they appear in the repo we have the following.
 
 We are taking command line arguments. The format is:
 
-"`<filename>` M p" where M is an integer represent the Msize and p is a character that turns the partition on/off.
+"`<filename>` `M` `p`" where M is an integer represent the Msize and p is a character that turns the partition on/off.
 The partition will be turned on with only 'y' (case sensitive) in the command line argument and any other character would not.
 We will just use 'y' and 'n' for yes and no respectively to specify if we want the partition added.
 
