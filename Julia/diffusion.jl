@@ -1,4 +1,8 @@
 #!/usr2/local/julia-1.8.2/bin/julia
+
+###### CSC 330
+###### SIMPLIFIED 3D DIFFUSION MODEL
+
 let
    # Read command line arguments
    maxsize = parse(Int32, ARGS[1])
