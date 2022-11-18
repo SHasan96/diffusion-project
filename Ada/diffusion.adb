@@ -1,10 +1,16 @@
-with ada.text_io, ada.integer_text_io, ada.long_float_text_io;
-use ada.text_io, ada.integer_text_io, ada.long_float_text_io;
+with ada.text_io, ada.integer_text_io, ada.long_float_text_io, 
+     ada.command_line, ada.strings.bounded;
+     
+use ada.text_io, ada.integer_text_io, ada.long_float_text_io,
+    ada.command_line;
 
 procedure diffusion is  
     type array_3D is array(Integer range <>, Integer range <>, Integer range <>) of Long_Float; 
-    maxsize : Integer := 5; 
     
+    -- Read arguments from command line
+    maxsize: Integer := Integer'Value(Argument(Number => 1));
+    p_flag : String := Argument(Number => 2);
+     
     diffusion_coefficient : Long_Float := 0.175;           -- Note: Ada variables are strongly typed.
     room_dimension : Long_Float := 5.0;                    -- 5 Meters
     speed_of_gas_molecules : Long_Float := 250.0;          -- Based on 100 g/mol gas at RT
@@ -15,28 +21,19 @@ procedure diffusion is
     
     time : Long_Float := 0.0;
     ratio : Long_Float := 0.0;
-    
-    p_flag : character := 'n';    
 
 begin 
-    put("Msize?: ");
-    get(maxsize);
-    
     timestep := (room_dimension / speed_of_gas_molecules) / Long_float(maxsize); -- h in seconds
     distance_between_blocks := room_dimension / Long_Float(maxsize);
     DTerm := diffusion_coefficient * timestep / (distance_between_blocks*distance_between_blocks);
 
-    put("Add partiton? (y/n): ");
-    get(p_flag);
-    
     declare 
         cube : array_3D(0..maxsize-1, 0..maxsize-1, 0..maxsize-1) := (others => (others => (others => 0.0))); 
         change : Long_Float := 0.0;
         minval : Long_Float;
         maxval : Long_Float;
         sumval : Long_Float := 0.0;
-        
-        
+                
     begin
         cube(0,0,0) := 1.0e21; -- Initiazlize first cell 
         
@@ -46,7 +43,7 @@ begin
            py : Integer := Integer(Float'Ceiling(Float(maxsize)*(1.0-0.75))-1.0); -- partition height as (1 - percent height)
        
         begin
-           if p_flag = 'y' then
+           if p_flag = "y" then
                for j in py..maxsize-1 loop
                    for k in 0..maxsize-1 loop
                        cube(px,j,k) := -1.0; -- Mark partition spaces with -1
