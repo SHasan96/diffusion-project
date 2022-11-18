@@ -1,3 +1,7 @@
+------------------------------------
+--CSC 330
+--SIMPLIFIED 3D DIFFUSION MODEL
+-------------------------------------
 with ada.text_io, ada.integer_text_io, ada.long_float_text_io, 
      ada.command_line, ada.strings.bounded;
      
