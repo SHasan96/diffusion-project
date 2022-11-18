@@ -1,7 +1,7 @@
-/*
+/*******************************
   CSC 330
   SIMPLIFIED 3D DIFFUSION MODEL
-*/
+********************************/
 #include<cmath> 
 #include<iostream>
 #include<string.h>
