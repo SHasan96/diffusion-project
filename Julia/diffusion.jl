@@ -1,11 +1,14 @@
 #!/usr2/local/julia-1.8.2/bin/julia
 let
-   print("Msize?: ")
-   maxsize = parse(Int32, readline())
-   print("Add partition? (y/n): ")
-   p_flag = read(stdin, Char)
+   # Read command line arguments
+   maxsize = parse(Int32, ARGS[1])
+   #print("Msize?: ")
+   #maxsize = parse(Int32, readline())
+   #print("Add partition? (y/n): ")
+   #p_flag = read(stdin, Char)
+   p_flag = ARGS[2]
    partition = false
-   if p_flag == 'y'
+   if p_flag == "y"
       partition = true
    end
 

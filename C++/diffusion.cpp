@@ -4,20 +4,16 @@
 */
 #include<cmath> 
 #include<iostream>
+#include<string.h>
 using namespace std;
 
-int main() {
-    // Ask for Msize
-    int maxsize;  // This is Msize, i.e., cubic divisions of the room dimension
-    cout << "M_size?: ";
-    cin >> maxsize; 
+int main(int argc, char** argv) {
+   
+    int const maxsize = strtol(argv[1], NULL, 10);  // This is Msize, i.e., cubic divisions of the room dimension
   
-    // Ask if user want to add a partition
     bool partition = false; // No partition by default
-    char flag;
-    cout << "Add partition? (y/n): ";
-    cin >> flag;
-    if (flag == 'y') { // If user inputs 'y' set partition as true
+    char const *flag = argv[2];
+    if (*flag == 'y') { // For argument 'y' set partition as true
         partition = true;
     }
     
@@ -32,13 +28,13 @@ int main() {
       }
     }   
 
-    //Declare variables
-    double diffusion_coefficient = 0.175; 
-    double room_dimension = 5;                      // 5 Meters
-    double speed_of_gas_molecules = 250.0;          // Based on 100 g/mol gas at RT
-    double timestep = (room_dimension / speed_of_gas_molecules) / maxsize; // h in seconds
-    double distance_between_blocks = room_dimension / maxsize;
-    double DTerm = diffusion_coefficient * timestep / (distance_between_blocks*distance_between_blocks);
+    //Declare variables (these can be constant)
+    double const diffusion_coefficient = 0.175; 
+    double const room_dimension = 5;                      // 5 Meters
+    double const speed_of_gas_molecules = 250.0;          // Based on 100 g/mol gas at RT
+    double const timestep = (room_dimension / speed_of_gas_molecules) / maxsize; // h in seconds
+    double const distance_between_blocks = room_dimension / maxsize;
+    double const DTerm = diffusion_coefficient * timestep / (distance_between_blocks*distance_between_blocks);
 
     cube[0][0][0] = 1.0e21; // Initialize the first cell
     
@@ -90,7 +86,7 @@ int main() {
         time += timestep;   
 
         // Variables to keep track of minimums, maximums and total
-        double sumval = 0.0;
+        double sumval = 0.0; 
         double maxval = cube[0][0][0]; 
         double minval = cube[0][0][0];
 
@@ -103,7 +99,7 @@ int main() {
                     }
                     maxval = max(cube[i][j][k],maxval);
                     minval = min(cube[i][j][k],minval);
-                    sumval += cube[i][j][k];
+                    sumval += cube[i][j][k];  // This was used to check for conserved mass
                 }
             }
         }
