@@ -4,6 +4,13 @@
 ;;; Simplified 3D Diffusion Model
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; Read and return command line arguments list
+(defun argv ()
+    (or
+       #+clisp (ext:argv)
+       #+sbcl sb-ext:*posix-argv*
+       nil))
+
 (let ((maxsize) ; Number of blocks per dimension
       (p-flag)  ; Partition flag
       (diffusion_coefficient 0.175)
@@ -19,20 +26,13 @@
       (minval 0.0l0)    ; (Note: "0.0l0" asserts double precision data type)
       (maxval 0.0l0)
       (sumval 0.0l0)
-      (px) ; Partition x-value 
+      (px)  ; Partition x-value 
       (py)) ; Partition y-value
       
-      (setf  maxsize (second *args*))    
-      ;; Get maxsize from user
-      ;(format t "Msize?: ")
-      ;(finish-output)
-      ;(setf maxsize (read))
-      ;(clear-input)
-      ;; Get character from user (only character 'y' will apply a partition)
-      (format t "Add partition? (y/n): ")
-      (finish-output)
-      (setf p-flag (read-char))
-      (clear-input)
+      ;; Get maxsize from command line and parse it as integer
+      (setf  maxsize (parse-integer (second (argv)))) 
+      ;; Get p-flag from command line (only "y" will apply a partition)
+      (setf p-flag (string-trim '(#\Space #\Tab #\Newline) (third (argv))))
 
       (setf timestep (/ (/ room_dimension speed_of_gas_molecules) maxsize)) ; h in seconds
       (setf distance_between_blocks (/ room_dimension maxsize))
@@ -40,8 +40,8 @@
 
       (setf cube (make-array (list maxsize maxsize maxsize):initial-element 0.0l0)) ; Create 3D-array with zeroes
 
-      ;; Add partition if user inputs 'y'
-      (when (char-equal p-flag #\y)
+      ;; Add partition if p-flag = "y"
+      (when (string-equal p-flag "y")
           (setf px (- (ceiling (* maxsize 0.5)) 1))
           (setf py (- (ceiling (* maxsize (- 1 0.75))) 1)) ; Partition height (- 1 percent-heigh) where percent-height = 0.75
           (loop for j from py to (- maxsize 1) do
