@@ -29,7 +29,7 @@ place the partition one block before or after. Array indices are obviously integ
 the block before. Even a slightly different choice yields a different result.
 
 For instance, if Msize = 10, then px = 4 (assuming the indexing starts at 0) and py starts at 2. Here px is the x-coordinate of the partition and py is 
-its y-coordinate. The partition obviously covers the whole z-axis at these values of px and py.
+its y-coordinate. The partition obviously covers the whole z-axis at these values of px and py. <br>
 Sample calculation: (assuming array indexing starts at 0) <br> 
    Msize = 10 <br>
    px = ceiling(10 * 0.5) - 1 = 5 - 1 = 4
@@ -38,7 +38,7 @@ Sample calculation: (assuming array indexing starts at 0) <br>
 The same logic was implemented in all languages (with modifications for ones where array indexing starts at 1). 
 
 Also, note that when a partition is added to smaller Msizes (less than 5), the program runs incorrectly. This is because of the placement of the partition ends up blocking the
-first cell where we fill the gas molecules in. 
+first cell where we fill in the gas molecules. 
 
 ## Compilation and execution instructions
 
@@ -46,10 +46,11 @@ The names of all source code files were "diffusion" plus the appropriate file ex
 
 We are taking command line arguments. The format is: <br>
 
-"`<filename>` `M` `p`" where M is an integer represent the Msize and p is a character that turns the partition on/off.
-The partition will be turned on with only 'y' (case sensitive) in the command line argument and any other character would not.
+"`<filename>` `M` `p`" where M is an integer representing the Msize and p is a character or string that turns the partition on/off.
+The partition will be turned on with only 'y' (case sensitive) in the command line argument and any other character will not turn it on. In other words, the partition remains off by default.
 We will just use 'y' and 'n' for yes and no respectively to specify if we want the partition added.
-Listed in order in which they appear in the repo we have the following. <br>
+
+Listed in order in which they appear in the repo we have the following. 
 
 In the follwing instructions I will use Msize = 10 (as an example) and run with the partition off first and then with it on.  
 
