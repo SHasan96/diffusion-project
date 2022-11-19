@@ -60,19 +60,20 @@ To compile:
 ```
 gnatmake diffusion.adb 
 ```
-To run with no partition:
+This will create some files and one of them called "diffusion" is the executable.<br>
+To run without partition:
 ```
 ./diffusion 10 n
 ``` 
 To run with the partition:
 ```
-./diffusion 10 n
+./diffusion 10 y
 ```
 
 ### C++
 To compile:
 ```
-g++  -O2 diffusion.cpp -o diffusion
+g++ -O2 diffusion.cpp -o diffusion
 ```
 An executable with the name "diffusion" is created. 
 Note that the -O2 optimization flag is important to run the program faster.<br>
