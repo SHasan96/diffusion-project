@@ -11,8 +11,8 @@ import sys
 def main():
     # Get command line arguments
     maxsize = int(sys.argv[1]) 
-    flag = sys.argv[2] 
-
+    flag = sys.argv[2].strip() 
+ 
     partition = False # No partition by default
     if flag == 'y':
         partition = True # Turn on partition only if user enter 'y'
@@ -41,7 +41,7 @@ def main():
                 cube[px][j][k] = -1 # Mark cubes with partition with -1
     
     # Go through all blocks
-    while ratio < 0.99:
+    while ratio <= 0.99:
         for i in range (0, maxsize):
              for j in range (0, maxsize):
                   for k in range (0, maxsize):
@@ -57,10 +57,10 @@ def main():
                                          (i == l and j == m+1 and k == n) or  
                                          (i == l and j == m-1 and k == n) or  
                                          (i == l+1 and j == m and k == n) or  
-                                         (i == l-1 and j == m and k == n)) :
-                                             change = (cube[i][j][k] - cube[l][m][n]) * DTerm
-                                             cube[i][j][k] = cube[i][j][k] - change                                
-                                             cube[l][m][n] = cube[l][m][n] + change
+                                         (i == l-1 and j == m and k == n)) :   
+                                           change = (cube[i][j][k] - cube[l][m][n]) * DTerm
+                                           cube[i][j][k] = cube[i][j][k] - change                                
+                                           cube[l][m][n] = cube[l][m][n] + change
 
         time = time + timestep 
         
@@ -74,13 +74,13 @@ def main():
             for j in range (0, maxsize):
                 for k in range (0, maxsize):
                     if cube[i][j][k] == -1: # Ignore partition blocks with -1
-                        continue 
+                        continue
                     maxval = max(cube[i][j][k],maxval)
                     minval = min(cube[i][j][k],minval)
-                    sumval += cube[i][j][k] 
+                    sumval = sumval + cube[i][j][k] 
                     
         ratio = minval / maxval        
-        #print(ratio, end="  ") 
+        #print(ratio, end=" ") 
         #print(time, "  ", cube[0][0][0], end="  ")
         #print(      "  ", cube[maxsize-1][0][0], end="  ")
         #print(      "  ", cube[maxsize-1][maxsize-1][0], end="  ")
