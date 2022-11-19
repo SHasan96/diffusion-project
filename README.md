@@ -19,9 +19,9 @@ Some languages are significantly slower than others.
 
 ## Partition details
 My logic behind the partition was to fill the partition blocks with -1. A negative number is easily distinguishable (since the number of molecules
-will never be negative). When the number of particles change/move from one block to another, we determine if a block or the block next to it is a partition
-block (i.e., check if the value at that array index is -1). If it is then we know it is a partition block and no change or molecule movement takes place.
-Such blocks are also ignored for calculating the ratio.
+will never be negative). When the number of particles change/move from one block to another, we determine if a block or any block next to it is a partition
+block (i.e., check if the value at that array index is -1). If it is then we know it is a partition block and no change or molecule movement takes place between these boxes.
+Partition blocks (with -1 values) are also ignored for calculating the ratio.
 
 ### Partition inconsistencies
 The partition is placed halfway into the room and covers three-forths (75%) of the height. However, for even Msizes we need to make a choice if we want to
@@ -29,7 +29,8 @@ place the partition one block before or after. Array indices are obviously integ
 the block before. Even a slightly different choice yields a different result.
 
 For instance, if Msize = 10, then px = 4 (assuming the indexing starts at 0) and py starts at 2. Here px is the x-coordinate of the partition and py is 
-its y-coordinate. The partition obviously covers the whole z-axis at these values of px and py. <br>
+its y-coordinate. The partition obviously covers the whole z-axis at these values of px and py. 
+
 Sample calculation: (assuming array indexing starts at 0) <br> 
    Msize = 10 <br>
    px = ceiling(10 * 0.5) - 1 = 5 - 1 = 4
@@ -73,8 +74,8 @@ To compile:
 ```
 g++  -O2 diffusion.cpp -o diffusion
 ```
-An executable with a the name "diffusion" is created. 
-Note that the -O2 optimization flag is important to run the program faster.
+An executable with the name "diffusion" is created. 
+Note that the -O2 optimization flag is important to run the program faster.<br>
 To run without partition:
 ```
 ./diffusion 10 n
@@ -89,8 +90,8 @@ To compile:
 ```
 gfortran -O2 diffusion.f95 -o diffusion
 ```
-An executable with a the name "diffusion" is created.
-Note that the -O2 optimization flag is important to run the program faster.
+An executable with the name "diffusion" is created.
+Note that the -O2 optimization flag is important to run the program faster. <br>
 To run without partition:
 ```
 ./diffusion 10 n
@@ -106,7 +107,7 @@ On the very top of our program we add the line:
 ```
 #!/usr2/local/julia-1.8.2/bin/julia
 ```
-We then make the file executable for your user by:
+We then make the file executable for the user by:
 ```
 chmod u+x diffusion.jl
 ```
@@ -125,7 +126,7 @@ On the very top of our program we add the line:
 ```
 #!/usr/bin/sbcl --script
 ```
-We then make the file executable for your user by:
+We then make the file executable for the user by:
 ```
 chmod u+x diffusion.lisp
 ```
@@ -144,7 +145,7 @@ On the very top of our program we add the line:
 ```
 #!/usr/bin/env python3
 ```
-We then make the file executable for your user by:
+We then make the file executable for the user by:
 ```
 chmod u+x diffusion.py
 ```
@@ -164,7 +165,7 @@ To compile:
 rustc -O diffusion.rs 
 ```
 An executable with a the name "diffusion" is created.
-Note that the -O optimization flag is very important as without it the program runs drastically slower.
+Note that the -O optimization flag is very important as without it the program runs drastically slower.<br>
 To run without partition:
 ```
 ./diffusion 10 n
